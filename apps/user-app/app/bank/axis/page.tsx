@@ -6,7 +6,7 @@ export default function () {
 
 
   return (
-    <Suspense fallback={<div>Loading Axis Bank Page...</div>}>
+    <Suspense fallback={<div>Redirecting to Axis Bank Page...</div>}>
       <AxisBankPage />
     </Suspense>
   );
