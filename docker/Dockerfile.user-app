@@ -22,4 +22,9 @@ WORKDIR /usr/src/app/apps/user-app
 # Expose the port
 EXPOSE 3000
 
+# Set default environment variables for NextAuth
+ENV NEXTAUTH_URL=http://localhost:3000
+ENV NEXTAUTH_SECRET=your-nextauth-secret-here
+ENV JWT_SECRET=your-jwt-secret-here
+
 CMD ["npm", "start"]

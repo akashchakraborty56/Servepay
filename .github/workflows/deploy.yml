@@ -69,11 +69,14 @@ jobs:
             sudo docker stop bank-webhook || echo "No existing bank-webhook container to stop"
             sudo docker rm bank-webhook || echo "No existing bank-webhook container to remove"
             
-            # Start user-app container
+            # Start user-app container with NextAuth environment variables
             sudo docker run -d \
               --name user-app \
               -p 3000:3000 \
               --restart unless-stopped \
+              -e NEXTAUTH_URL=http://${{ secrets.SSH_HOST }}:3000 \
+              -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               akashchakraborty56/servepay-user-app:latest
             
             # Start bank-webhook container
