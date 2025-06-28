@@ -3,7 +3,7 @@ name: Build and Deploy to Docker Hub
 on:
   push:
     branches:
-      - main
+      - master  # Adjusted to trigger on pushes to master
 
 jobs:
   build-and-push:
@@ -11,6 +11,9 @@ jobs:
     steps:
     - name: Check Out Repo
       uses: actions/checkout@v2
+
+    - name: Prepare Dockerfile
+      run: cp ./docker/Dockerfile.user ./Dockerfile
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v1
@@ -22,9 +25,21 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./docker/Dockerfile.user-app
+        file: ./Dockerfile
         push: true
-        tags: akashchakraborty56/servepay  # Replace with your Docker Hub username and repository
+        tags: akashchakraborty56/servepay
 
     - name: Verify Pushed Image
-      run: docker pull akashchakraborty56/servepay  # Replace with your Docker Hub username and repository
+      run: docker pull akashchakraborty56/servepay:latest
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          sudo docker pull akashchakraborty56/servepay:latest
+          sudo docker stop web-app || true
+          sudo docker rm web-app || true
+          sudo docker run -d --name web-app -p 3005:3000 akashchakraborty56/servepay:latest
