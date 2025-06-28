@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 export default function () {
     return (
-        <Suspense fallback={<div>Redirecting ...</div>}>
+        <Suspense fallback={<div>Loading ...</div>}>
             <HDFCBankPage></HDFCBankPage>
         </Suspense>
     )
