@@ -13,13 +13,13 @@ RUN npm install
 # Generate Prisma client
 RUN npm run db:generate
 
-# Build the user-app application
-RUN npm run build --filter=user-app
+# Build the bank-webhook application
+RUN npm run build --filter=bank-webhook
 
-# Set working directory to user-app
-WORKDIR /usr/src/app/apps/user-app
+# Set working directory to bank-webhook
+WORKDIR /usr/src/app/apps/bank-webhook
 
-# Expose the port
-EXPOSE 3000
+# Expose the port (bank-webhook runs on port 3003)
+EXPOSE 3003
 
-CMD ["npm", "start"]
+CMD ["npm", "start"] 
